@@ -1,7 +1,7 @@
 name: honeywell_plugin
 description: A new flutter plugin project.
 version: 0.0.1
-homepage:
+repository: https://github.com/ln-sergey/honeywell_plugin
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
