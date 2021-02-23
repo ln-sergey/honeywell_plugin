@@ -30,7 +30,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
     WidgetsBinding.instance.addObserver(this);
     honeywellScanner.scannerCallBack = this;
     updateScanProperties();
-    Timer.periodic(Duration(microseconds: 300), (timer) async { scannerAvailable = await honeywellScanner.isAvailable(); });
+    Timer.periodic(Duration(microseconds: 300), (timer) async {
+      scannerAvailable = await honeywellScanner.isAvailable();
+    });
   }
 
   updateScanProperties() {

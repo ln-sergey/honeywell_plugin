@@ -1,6 +1,6 @@
 name: honeywell_plugin
-description: A new flutter plugin project.
-version: 0.0.1
+description: Flutter plugin for connecting to honeywell hardware.
+version: 0.0.3
 repository: https://github.com/ln-sergey/honeywell_plugin
 
 environment:

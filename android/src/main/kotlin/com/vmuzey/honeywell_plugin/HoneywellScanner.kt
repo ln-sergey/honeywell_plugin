@@ -3,6 +3,7 @@ package com.vmuzey.honeywell_plugin
 import android.content.Context
 
 abstract class HoneywellScanner(context: Context) : ScannerCallBack {
+    var initialized = false
     protected val context: Context
     private var scannerCallBack: ScannerCallBack? = null
     fun setScannerCallBack(scannerCallBack: ScannerCallBack?) {

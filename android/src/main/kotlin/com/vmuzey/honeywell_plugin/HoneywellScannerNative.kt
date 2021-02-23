@@ -8,7 +8,6 @@ import com.honeywell.aidc.BarcodeReader.BarcodeListener
 
 
 class HoneywellScannerNative(context: Context) : HoneywellScanner(context), CreatedCallback, BarcodeListener {
-    private var initialized = false
     private var initializing = false
     private var pendingResume = false
 
