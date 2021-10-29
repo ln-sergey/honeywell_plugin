@@ -161,8 +161,8 @@ extension CodeFormatUtils on CodeFormat {
     return null;
   }
 
-  static CodeFormat? valueOf(String name) => CodeFormat.values
-      .firstWhereOrNull((value) => value.name == name);
+  static CodeFormat? valueOf(String name) =>
+      CodeFormat.values.firstWhereOrNull((value) => value.name == name);
 
   /// Returns a Map of Honeywell's Barcode formats properties enabled by default
   /// according to the List of CodeFormat specified.
@@ -192,12 +192,13 @@ extension CodeFormatUtils on CodeFormat {
   /// List of CodeFormat specified and the [enabled] value which is true by default.
   /// [codeFormats] the List of CodeFormat enums to be converted to Honeywell properties
   /// [enabled] the value to be set to the format property, true or false
-  static Map<String?, dynamic> getAsProperties(final List<CodeFormat> codeFormats,
+  static Map<String?, dynamic> getAsProperties(
+      final List<CodeFormat> codeFormats,
       {bool enabled = true}) {
     if (codeFormats.isEmpty) return {};
     Map<String?, dynamic> mapProperties = {};
     codeFormats.forEach(
-            (codeFormat) => mapProperties[codeFormat.propertyName] = enabled);
+        (codeFormat) => mapProperties[codeFormat.propertyName] = enabled);
     return mapProperties;
   }
 
@@ -209,12 +210,13 @@ extension CodeFormatUtils on CodeFormat {
   /// [enabled] the value to be set to the format property, true or false.
   /// IMPORTANT:
   /// - The codeFormats not specified in the [codeFormats] list will be set to the opposite of enabled like !enabled
-  static Map<String?, dynamic> getAsPropertiesComplement(List<CodeFormat>? codeFormats,
+  static Map<String?, dynamic> getAsPropertiesComplement(
+      List<CodeFormat>? codeFormats,
       {bool enabled = true}) {
     codeFormats ??= [];
 
     Map<String?, dynamic> mapProperties =
-    getAsProperties(codeFormats, enabled: enabled);
+        getAsProperties(codeFormats, enabled: enabled);
     CodeFormat.values.forEach((codeFormat) {
       String? propertyName = codeFormat.propertyName;
       if (propertyName != null && !mapProperties.containsKey(propertyName))

@@ -19,7 +19,8 @@ class HoneywellPlugin {
   static const MethodChannel _channel = const MethodChannel('honeywell_plugin');
   ScannerCallBack _scannerCallBack;
 
-  HoneywellPlugin({required ScannerCallBack scannerCallBack}) : this._scannerCallBack = scannerCallBack {
+  HoneywellPlugin({required ScannerCallBack scannerCallBack})
+      : this._scannerCallBack = scannerCallBack {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
@@ -92,13 +93,13 @@ class HoneywellPlugin {
   }
 
   /// This method returns bool value
-  /// 
+  ///
   /// If returned value is true it means
   /// that you can use honeywell scann hardware
   ///
   /// If returned value is false it means
   /// that you can't use honeywell scann hardware
-  /// 
+  ///
   /// Firsly, you must call [startScanner]
   Future<bool?> isAvailable() {
     return _channel.invokeMethod(_IS_AVAILABLE);
