@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 
 enum CodeFormat {
@@ -119,7 +120,7 @@ extension CodeFormatUtils on CodeFormat {
 
   String get name => describeEnum(this);
 
-  String get propertyName {
+  String? get propertyName {
     try {
       switch (this) {
         case CodeFormat.AZTEC:
@@ -160,16 +161,8 @@ extension CodeFormatUtils on CodeFormat {
     return null;
   }
 
-  static CodeFormat valueOf(String name) => CodeFormat.values
-      .firstWhere((value) => value.name == name, orElse: () => null);
-
-  /// This function is Deprecated, [codeFormat.propertyName] instead
-  @deprecated
-  String getPropertyName(CodeFormat value) => value?.propertyName;
-
-  /// This function is Deprecated, [codeFormat.name] instead
-  @deprecated
-  String nameOf(CodeFormat value) => value?.name;
+  static CodeFormat? valueOf(String name) => CodeFormat.values
+      .firstWhereOrNull((value) => value.name == name);
 
   /// Returns a Map of Honeywell's Barcode formats properties enabled by default
   /// according to the List of CodeFormat specified.
@@ -179,16 +172,16 @@ extension CodeFormatUtils on CodeFormat {
   /// - Empty codeFormats list means no properties at all
   /// This function is Deprecated, use [getAsPropertiesComplement(...)] instead
   @deprecated
-  static Map<String, dynamic> getFormatsAsProperties(
+  static Map<String?, dynamic> getFormatsAsProperties(
       final List<CodeFormat> codeFormats) {
-    if (codeFormats?.isEmpty ?? true) return {};
+    if (codeFormats.isEmpty) return {};
 
-    Map<String, dynamic> mapProperties = {};
+    Map<String?, dynamic> mapProperties = {};
     codeFormats.forEach((codeFormat) {
-      mapProperties[codeFormat?.propertyName] = true;
+      mapProperties[codeFormat.propertyName] = true;
     });
     CodeFormat.values.forEach((codeFormat) {
-      String propertyName = codeFormat?.propertyName;
+      String? propertyName = codeFormat.propertyName;
       if (propertyName != null)
         mapProperties[propertyName] = mapProperties.containsKey(propertyName);
     });
@@ -199,13 +192,12 @@ extension CodeFormatUtils on CodeFormat {
   /// List of CodeFormat specified and the [enabled] value which is true by default.
   /// [codeFormats] the List of CodeFormat enums to be converted to Honeywell properties
   /// [enabled] the value to be set to the format property, true or false
-  static Map<String, dynamic> getAsProperties(final List<CodeFormat> codeFormats,
+  static Map<String?, dynamic> getAsProperties(final List<CodeFormat> codeFormats,
       {bool enabled = true}) {
-    if (codeFormats?.isEmpty ?? true) return {};
-    enabled ??= true;
-    Map<String, dynamic> mapProperties = {};
+    if (codeFormats.isEmpty) return {};
+    Map<String?, dynamic> mapProperties = {};
     codeFormats.forEach(
-            (codeFormat) => mapProperties[codeFormat?.propertyName] = enabled);
+            (codeFormat) => mapProperties[codeFormat.propertyName] = enabled);
     return mapProperties;
   }
 
@@ -217,15 +209,14 @@ extension CodeFormatUtils on CodeFormat {
   /// [enabled] the value to be set to the format property, true or false.
   /// IMPORTANT:
   /// - The codeFormats not specified in the [codeFormats] list will be set to the opposite of enabled like !enabled
-  static Map<String, dynamic> getAsPropertiesComplement(List<CodeFormat> codeFormats,
+  static Map<String?, dynamic> getAsPropertiesComplement(List<CodeFormat>? codeFormats,
       {bool enabled = true}) {
     codeFormats ??= [];
-    enabled ??= true;
 
-    Map<String, dynamic> mapProperties =
+    Map<String?, dynamic> mapProperties =
     getAsProperties(codeFormats, enabled: enabled);
     CodeFormat.values.forEach((codeFormat) {
-      String propertyName = codeFormat?.propertyName;
+      String? propertyName = codeFormat.propertyName;
       if (propertyName != null && !mapProperties.containsKey(propertyName))
         mapProperties[propertyName] = !enabled;
     });

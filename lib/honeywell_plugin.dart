@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/services.dart';
@@ -20,9 +19,8 @@ class HoneywellPlugin {
   static const MethodChannel _channel = const MethodChannel('honeywell_plugin');
   ScannerCallBack _scannerCallBack;
 
-  HoneywellPlugin({ScannerCallBack scannerCallBack}) {
+  HoneywellPlugin({required ScannerCallBack scannerCallBack}) : this._scannerCallBack = scannerCallBack {
     _channel.setMethodCallHandler(_onMethodCall);
-    this._scannerCallBack = scannerCallBack;
   }
 
   set scannerCallBack(ScannerCallBack scannerCallBack) =>
@@ -43,11 +41,11 @@ class HoneywellPlugin {
     } catch (e) {
       print(e);
     }
-    return null;
+    return Future.value(null);
   }
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+  static Future<String?> get platformVersion async {
+    final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
 
@@ -56,8 +54,8 @@ class HoneywellPlugin {
   ///Note that this method always called on a worker thread
   ///
   ///@param code Encapsulates the result of decoding a barcode within an image
-  void onDecoded(String code) {
-    if (_scannerCallBack != null) _scannerCallBack.onDecoded(code);
+  void onDecoded(String? code) {
+    _scannerCallBack.onDecoded(code);
   }
 
   ///Called when error has occurred
@@ -66,7 +64,7 @@ class HoneywellPlugin {
   ///
   ///@param error Exception that has been thrown
   void onError(Exception error) {
-    if (_scannerCallBack != null) _scannerCallBack.onError(error);
+    _scannerCallBack.onError(error);
   }
 
   /// Set Honeywell scan properties
@@ -102,7 +100,7 @@ class HoneywellPlugin {
   /// that you can't use honeywell scann hardware
   /// 
   /// Firsly, you must call [startScanner]
-  Future<bool> isAvailable() {
+  Future<bool?> isAvailable() {
     return _channel.invokeMethod(_IS_AVAILABLE);
   }
 

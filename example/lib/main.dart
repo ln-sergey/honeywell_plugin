@@ -17,36 +17,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements ScannerCallBack {
-  HoneywellPlugin honeywellScanner = HoneywellPlugin();
-  String scannedCode = 'Empty';
+  HoneywellPlugin? honeywellScanner;
+  String? scannedCode = 'Empty';
   bool scannerEnabled = false;
-  bool scannerAvailable = false;
+  bool? scannerAvailable = false;
   bool scan1DFormats = true;
   bool scan2DFormats = true;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    honeywellScanner.scannerCallBack = this;
+    WidgetsBinding.instance!.addObserver(this);
+    honeywellScanner = HoneywellPlugin(scannerCallBack: this);
     updateScanProperties();
     Timer.periodic(Duration(microseconds: 300), (timer) async {
-      scannerAvailable = await honeywellScanner.isAvailable();
+      scannerAvailable = await honeywellScanner!.isAvailable();
     });
   }
 
   updateScanProperties() {
     List<CodeFormat> codeFormats = [];
-    if (scan1DFormats ?? false)
+    if (scan1DFormats)
       codeFormats.addAll(CodeFormatUtils.ALL_1D_FORMATS);
-    if (scan2DFormats ?? false)
+    if (scan2DFormats)
       codeFormats.addAll(CodeFormatUtils.ALL_2D_FORMATS);
-    honeywellScanner.setProperties(
-        CodeFormatUtils.getAsPropertiesComplement(codeFormats));
+    honeywellScanner!.setProperties(
+        CodeFormatUtils.getAsPropertiesComplement(codeFormats) as Map<String, dynamic>);
   }
 
   @override
-  void onDecoded(String result) {
+  void onDecoded(String? result) {
     setState(() {
       scannedCode = result;
     });
@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
             Divider(
               color: Colors.transparent,
             ),
-            Text('Scanner is ${scannerAvailable ? "Available" : "Unavailable"}',
+            Text('Scanner is ${scannerAvailable ?? false ? "Available" : "Unavailable"}',
               style: TextStyle(color: scannerEnabled ? Colors.blue : Colors.red),),
             Divider(
               color: Colors.transparent,
@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
             RaisedButton(
               child: Text("Start Scanner"),
               onPressed: () {
-                honeywellScanner.startScanner();
+                honeywellScanner!.startScanner();
                 scannerEnabled = true;
                 setState(() {});
               },
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
             RaisedButton(
               child: Text("Stop Scanner"),
               onPressed: () {
-                honeywellScanner.stopScanner();
+                honeywellScanner!.stopScanner();
                 scannerEnabled = false;
                 setState(() {});
               },
@@ -127,10 +127,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
             ),
             GestureDetector(
               onTapDown: (tapDownDetails) {
-                honeywellScanner.startScanning();
+                honeywellScanner!.startScanning();
               },
               onTapUp: (tapUpDetails) {
-                honeywellScanner.stopScanning();
+                honeywellScanner!.stopScanning();
               },
               child: Text('SCANN', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),))
           ],
@@ -145,16 +145,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
     if(state == null) return;
     switch(state){
       case AppLifecycleState.resumed:
-        if(honeywellScanner != null) honeywellScanner.resumeScanner();
+        if(honeywellScanner != null) honeywellScanner!.resumeScanner();
         break;
       case AppLifecycleState.inactive:
-        if(honeywellScanner != null) honeywellScanner.pauseScanner();
+        if(honeywellScanner != null) honeywellScanner!.pauseScanner();
         break;
       case AppLifecycleState.paused://AppLifecycleState.paused is used as stopped state because deactivate() works more as a pause for lifecycle
-        if(honeywellScanner != null) honeywellScanner.pauseScanner();
+        if(honeywellScanner != null) honeywellScanner!.pauseScanner();
         break;
       case AppLifecycleState.detached:
-        if(honeywellScanner != null) honeywellScanner.pauseScanner();
+        if(honeywellScanner != null) honeywellScanner!.pauseScanner();
         break;
       default:
         break;
@@ -163,7 +163,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver implements Sc
 
   @override
   void dispose() {
-    if(honeywellScanner != null) honeywellScanner.stopScanner();
+    if(honeywellScanner != null) honeywellScanner!.stopScanner();
     super.dispose();
   }
 }
