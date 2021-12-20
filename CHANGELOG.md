@@ -1,4 +1,4 @@
-## 1.0.1
+## 1.0.2
 
-* Fix aar package location.
+* Fix modules dependencies.
 
