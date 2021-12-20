@@ -1,3 +1,4 @@
-## 0.0.3
+## 1.0.2
 
-* Fix isAvailable method.
+* Fix modules dependencies.
+

@@ -1,1 +1,2 @@
 rootProject.name = 'honeywell_plugin'
+include ':honeywell'
