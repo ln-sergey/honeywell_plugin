@@ -1,3 +1,4 @@
-## 0.0.3
+## 1.0.1
 
-* Fix isAvailable method.
+* Fix aar package location.
+
