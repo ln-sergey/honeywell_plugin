@@ -1,4 +1,4 @@
-## 1.0.2
+## 1.0.3
 
-* Fix modules dependencies.
+* Fix honeywell SDK location. Now it must be located inside your own project as it was shown in example.
 
