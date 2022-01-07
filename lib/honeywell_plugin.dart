@@ -69,7 +69,7 @@ class HoneywellPlugin {
   }
 
   /// Set Honeywell scan properties
-  Future setProperties(Map<String, dynamic> mapProperties) {
+  Future setProperties(Map<String?, dynamic> mapProperties) {
     return _channel.invokeMethod(_SET_PROPERTIES, mapProperties);
   }
 

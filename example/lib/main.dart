@@ -41,9 +41,8 @@ class _MyAppState extends State<MyApp>
     List<CodeFormat> codeFormats = [];
     if (scan1DFormats) codeFormats.addAll(CodeFormatUtils.ALL_1D_FORMATS);
     if (scan2DFormats) codeFormats.addAll(CodeFormatUtils.ALL_2D_FORMATS);
-    honeywellScanner!.setProperties(
-        CodeFormatUtils.getAsPropertiesComplement(codeFormats)
-            as Map<String, dynamic>);
+    honeywellScanner!
+        .setProperties(CodeFormatUtils.getAsPropertiesComplement(codeFormats));
   }
 
   @override
