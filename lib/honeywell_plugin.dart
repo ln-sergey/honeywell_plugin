@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'scanner_callback.dart';
@@ -37,10 +38,10 @@ class HoneywellPlugin {
           onError(Exception(call.arguments));
           break;
         default:
-          print(call.arguments);
+          debugPrint("${call.arguments}");
       }
     } catch (e) {
-      print(e);
+      debugPrint("$e");
     }
     return Future.value(null);
   }
