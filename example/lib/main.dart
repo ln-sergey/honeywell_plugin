@@ -1,17 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
 import 'package:honeywell_plugin/honeywell_plugin.dart';
 import 'package:honeywell_plugin/scanner_callback.dart';
 import 'package:honeywell_plugin/code_format.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -32,7 +34,7 @@ class _MyAppState extends State<MyApp>
     WidgetsBinding.instance!.addObserver(this);
     honeywellScanner = HoneywellPlugin(scannerCallBack: this);
     updateScanProperties();
-    Timer.periodic(Duration(microseconds: 300), (timer) async {
+    Timer.periodic(const Duration(microseconds: 300), (timer) async {
       scannerAvailable = await honeywellScanner!.isAvailable();
     });
   }
