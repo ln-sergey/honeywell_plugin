@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 
@@ -49,30 +51,30 @@ enum CodeFormat {
 }
 
 extension CodeFormatUtils on CodeFormat {
-  static final String _CODE_FORMAT_PROPERTY_AZTEC_ENABLED = "DEC_AZTEC_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_CODABAR_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_AZTEC_ENABLED = "DEC_AZTEC_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_CODABAR_ENABLED =
       "DEC_CODABAR_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_CODE_39_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_CODE_39_ENABLED =
       "DEC_CODE39_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_CODE_93_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_CODE_93_ENABLED =
       "DEC_CODE93_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_CODE_128_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_CODE_128_ENABLED =
       "DEC_CODE128_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_DATAMATRIX_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_DATAMATRIX_ENABLED =
       "DEC_DATAMATRIX_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_EAN_8_ENABLED = "DEC_EAN8_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_EAN_13_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_EAN_8_ENABLED = "DEC_EAN8_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_EAN_13_ENABLED =
       "DEC_EAN13_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_MAXICODE_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_MAXICODE_ENABLED =
       "DEC_MAXICODE_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_PDF_417_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_PDF_417_ENABLED =
       "DEC_PDF417_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_QR_CODE_ENABLED = "DEC_QR_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_RSS_ENABLED = "DEC_RSS_14_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_RSS_EXPANDED_ENABLED =
+  static const String _CODE_FORMAT_PROPERTY_QR_CODE_ENABLED = "DEC_QR_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_RSS_ENABLED = "DEC_RSS_14_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_RSS_EXPANDED_ENABLED =
       "DEC_RSS_EXPANDED_ENABLED";
-  static final String _CODE_FORMAT_PROPERTY_UPC_A_ENABLE = "DEC_UPCA_ENABLE";
-  static final String _CODE_FORMAT_PROPERTY_UPC_E_ENABLED = "DEC_UPCE0_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_UPC_A_ENABLE = "DEC_UPCA_ENABLE";
+  static const String _CODE_FORMAT_PROPERTY_UPC_E_ENABLED = "DEC_UPCE0_ENABLED";
 
   /// All supported code formats
   static const List<CodeFormat> ALL_FORMATS = CodeFormat.values;
@@ -156,7 +158,7 @@ extension CodeFormatUtils on CodeFormat {
         default:
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     return null;
   }
@@ -171,20 +173,21 @@ extension CodeFormatUtils on CodeFormat {
   /// - The codeFormats not specified in the [codeFormats] list will be set to disabled
   /// - Empty codeFormats list means no properties at all
   /// This function is Deprecated, use [getAsPropertiesComplement(...)] instead
-  @deprecated
+  @Deprecated("This function is Deprecated, use [getAsPropertiesComplement(...)]")
   static Map<String?, dynamic> getFormatsAsProperties(
       final List<CodeFormat> codeFormats) {
     if (codeFormats.isEmpty) return {};
 
     Map<String?, dynamic> mapProperties = {};
-    codeFormats.forEach((codeFormat) {
+    for (var codeFormat in codeFormats) {
       mapProperties[codeFormat.propertyName] = true;
-    });
-    CodeFormat.values.forEach((codeFormat) {
+    }
+    for (var codeFormat in CodeFormat.values) {
       String? propertyName = codeFormat.propertyName;
-      if (propertyName != null)
+      if (propertyName != null) {
         mapProperties[propertyName] = mapProperties.containsKey(propertyName);
-    });
+      }
+    }
     return mapProperties;
   }
 
@@ -197,8 +200,9 @@ extension CodeFormatUtils on CodeFormat {
       {bool enabled = true}) {
     if (codeFormats.isEmpty) return {};
     Map<String?, dynamic> mapProperties = {};
-    codeFormats.forEach(
-        (codeFormat) => mapProperties[codeFormat.propertyName] = enabled);
+    for (var codeFormat in codeFormats) {
+      mapProperties[codeFormat.propertyName] = enabled;
+    }
     return mapProperties;
   }
 
@@ -217,11 +221,12 @@ extension CodeFormatUtils on CodeFormat {
 
     Map<String?, dynamic> mapProperties =
         getAsProperties(codeFormats, enabled: enabled);
-    CodeFormat.values.forEach((codeFormat) {
+    for (var codeFormat in CodeFormat.values) {
       String? propertyName = codeFormat.propertyName;
-      if (propertyName != null && !mapProperties.containsKey(propertyName))
+      if (propertyName != null && !mapProperties.containsKey(propertyName)) {
         mapProperties[propertyName] = !enabled;
-    });
+      }
+    }
     return mapProperties;
   }
 }

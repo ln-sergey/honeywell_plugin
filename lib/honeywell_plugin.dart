@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -17,11 +19,11 @@ class HoneywellPlugin {
   static const _ON_DECODED = "onDecoded";
   static const _ON_ERROR = "onError";
 
-  static const MethodChannel _channel = const MethodChannel('honeywell_plugin');
+  static const MethodChannel _channel = MethodChannel('honeywell_plugin');
   ScannerCallBack _scannerCallBack;
 
   HoneywellPlugin({required ScannerCallBack scannerCallBack})
-      : this._scannerCallBack = scannerCallBack {
+      : _scannerCallBack = scannerCallBack {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
