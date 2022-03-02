@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp>
               style:
                   TextStyle(color: scannerEnabled ? Colors.blue : Colors.red),
             ),
-            Divider(
+            const Divider(
               color: Colors.transparent,
             ),
             Text(
@@ -84,16 +84,16 @@ class _MyAppState extends State<MyApp>
               style:
                   TextStyle(color: scannerEnabled ? Colors.blue : Colors.red),
             ),
-            Divider(
+            const Divider(
               color: Colors.transparent,
             ),
             Text('Scanned code: $scannedCode'),
-            Divider(
+            const Divider(
               color: Colors.transparent,
             ),
             SwitchListTile(
-              title: Text("Scan 1D Codes"),
-              subtitle: Text("like Code-128, Code-39, Code-93, etc"),
+              title: const Text("Scan 1D Codes"),
+              subtitle: const Text("like Code-128, Code-39, Code-93, etc"),
               value: scan1DFormats,
               onChanged: (value) {
                 scan1DFormats = value;
@@ -102,8 +102,8 @@ class _MyAppState extends State<MyApp>
               },
             ),
             SwitchListTile(
-              title: Text("Scan 2D Codes"),
-              subtitle: Text("like QR, Data Matrix, Aztec, etc"),
+              title: const Text("Scan 2D Codes"),
+              subtitle: const Text("like QR, Data Matrix, Aztec, etc"),
               value: scan2DFormats,
               onChanged: (value) {
                 scan2DFormats = value;
@@ -111,26 +111,26 @@ class _MyAppState extends State<MyApp>
                 setState(() {});
               },
             ),
-            RaisedButton(
-              child: Text("Start Scanner"),
+            ElevatedButton(
+              child: const Text("Start Scanner"),
               onPressed: () {
                 honeywellScanner!.startScanner();
                 scannerEnabled = true;
                 setState(() {});
               },
             ),
-            Divider(
+            const Divider(
               color: Colors.transparent,
             ),
-            RaisedButton(
-              child: Text("Stop Scanner"),
+            ElevatedButton(
+              child: const Text("Stop Scanner"),
               onPressed: () {
                 honeywellScanner!.stopScanner();
                 scannerEnabled = false;
                 setState(() {});
               },
             ),
-            Divider(
+            const Divider(
               color: Colors.transparent,
             ),
             GestureDetector(
@@ -140,7 +140,7 @@ class _MyAppState extends State<MyApp>
                 onTapUp: (tapUpDetails) {
                   honeywellScanner!.stopScanning();
                 },
-                child: Text(
+                child: const Text(
                   'SCANN',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -156,7 +156,6 @@ class _MyAppState extends State<MyApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == null) return;
     switch (state) {
       case AppLifecycleState.resumed:
         if (honeywellScanner != null) honeywellScanner!.resumeScanner();
