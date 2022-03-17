@@ -152,6 +152,8 @@ extension CodeFormatUtils on CodeFormat {
           return _CODE_FORMAT_PROPERTY_AZTEC_ENABLED;
         case CodeFormat.CODABAR:
           return _CODE_FORMAT_PROPERTY_CODABAR_ENABLED;
+        case CodeFormat.CODABAR_START_STOP:
+          return _CODE_FORMAT_PROPERTY_CODABAR_START_STOP;
         case CodeFormat.CODE_39:
           return _CODE_FORMAT_PROPERTY_CODE_39_ENABLED;
         case CodeFormat.CODE_39_CHECK_DIGIT:
