@@ -9,9 +9,11 @@ enum CodeFormat {
 
   /// CODABAR 1D format.
   CODABAR,
+  CODABAR_START_STOP,
 
   /// Code 39 1D format.
   CODE_39,
+  CODE_39_CHECK_DIGIT,
 
   /// Code 93 1D format.
   CODE_93,
@@ -24,9 +26,11 @@ enum CodeFormat {
 
   /// EAN-8 1D format.
   EAN_8,
+  EAN_8_CHECK_DIGIT,
 
   /// EAN-13 1D format.
   EAN_13,
+  EAN_13_CHECK_DIGIT,
 
   /// MaxiCode 2D barcode format.
   MAXICODE,
@@ -45,17 +49,24 @@ enum CodeFormat {
 
   /// UPC-A 1D format.
   UPC_A,
+  UPC_A_CHECK_DIGIT,
 
   /// UPC-E 1D format.
   UPC_E,
+  UPC_E_CHECK_DIGIT,
 }
 
 extension CodeFormatUtils on CodeFormat {
   static const String _CODE_FORMAT_PROPERTY_AZTEC_ENABLED = "DEC_AZTEC_ENABLED";
   static const String _CODE_FORMAT_PROPERTY_CODABAR_ENABLED =
       "DEC_CODABAR_ENABLED";
+
+  static const String _CODE_FORMAT_PROPERTY_CODABAR_START_STOP =
+      "DEC_CODABAR_START_STOP_TRANSMIT";
   static const String _CODE_FORMAT_PROPERTY_CODE_39_ENABLED =
       "DEC_CODE39_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_CODE_39_CHECK_DIGIT =
+      "DEC_CODE39_CHECK_DIGIT_TRANSMIT";
   static const String _CODE_FORMAT_PROPERTY_CODE_93_ENABLED =
       "DEC_CODE93_ENABLED";
   static const String _CODE_FORMAT_PROPERTY_CODE_128_ENABLED =
@@ -63,8 +74,12 @@ extension CodeFormatUtils on CodeFormat {
   static const String _CODE_FORMAT_PROPERTY_DATAMATRIX_ENABLED =
       "DEC_DATAMATRIX_ENABLED";
   static const String _CODE_FORMAT_PROPERTY_EAN_8_ENABLED = "DEC_EAN8_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_EAN_8_CHECK_DIGIT =
+      "DEC_EAN8_CHECK_DIGIT_TRANSMIT";
   static const String _CODE_FORMAT_PROPERTY_EAN_13_ENABLED =
       "DEC_EAN13_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_EAN_13_CHECK_DIGIT =
+      "DEC_EAN13_CHECK_DIGIT_TRANSMIT";
   static const String _CODE_FORMAT_PROPERTY_MAXICODE_ENABLED =
       "DEC_MAXICODE_ENABLED";
   static const String _CODE_FORMAT_PROPERTY_PDF_417_ENABLED =
@@ -74,7 +89,11 @@ extension CodeFormatUtils on CodeFormat {
   static const String _CODE_FORMAT_PROPERTY_RSS_EXPANDED_ENABLED =
       "DEC_RSS_EXPANDED_ENABLED";
   static const String _CODE_FORMAT_PROPERTY_UPC_A_ENABLE = "DEC_UPCA_ENABLE";
+  static const String _CODE_FORMAT_PROPERTY_UPC_A_CHECK_DIGIT =
+      "DEC_UPCA_CHECK_DIGIT_TRANSMIT";
   static const String _CODE_FORMAT_PROPERTY_UPC_E_ENABLED = "DEC_UPCE0_ENABLED";
+  static const String _CODE_FORMAT_PROPERTY_UPC_E_CHECK_DIGIT =
+      "DEC_UPCE_CHECK_DIGIT_TRANSMIT";
 
   /// All supported code formats
   static const List<CodeFormat> ALL_FORMATS = CodeFormat.values;
@@ -83,14 +102,18 @@ extension CodeFormatUtils on CodeFormat {
   static const List<CodeFormat> ALL_1D_FORMATS = [
     CodeFormat.CODABAR,
     CodeFormat.CODE_39,
+    CodeFormat.CODE_39_CHECK_DIGIT,
     CodeFormat.CODE_93,
     CodeFormat.CODE_128,
     CodeFormat.EAN_8,
+    CodeFormat.EAN_8_CHECK_DIGIT,
     CodeFormat.EAN_13,
+    CodeFormat.EAN_13_CHECK_DIGIT,
     CodeFormat.RSS_14,
     CodeFormat.RSS_EXPANDED,
     CodeFormat.UPC_A,
-    CodeFormat.UPC_E,
+    CodeFormat.UPC_A_CHECK_DIGIT,
+    CodeFormat.UPC_E_CHECK_DIGIT,
   ];
 
   /// One dimensional product code formats
@@ -131,6 +154,8 @@ extension CodeFormatUtils on CodeFormat {
           return _CODE_FORMAT_PROPERTY_CODABAR_ENABLED;
         case CodeFormat.CODE_39:
           return _CODE_FORMAT_PROPERTY_CODE_39_ENABLED;
+        case CodeFormat.CODE_39_CHECK_DIGIT:
+          return _CODE_FORMAT_PROPERTY_CODE_39_CHECK_DIGIT;
         case CodeFormat.CODE_93:
           return _CODE_FORMAT_PROPERTY_CODE_93_ENABLED;
         case CodeFormat.CODE_128:
@@ -139,8 +164,12 @@ extension CodeFormatUtils on CodeFormat {
           return _CODE_FORMAT_PROPERTY_DATAMATRIX_ENABLED;
         case CodeFormat.EAN_8:
           return _CODE_FORMAT_PROPERTY_EAN_8_ENABLED;
+        case CodeFormat.EAN_8_CHECK_DIGIT:
+          return _CODE_FORMAT_PROPERTY_EAN_8_CHECK_DIGIT;
         case CodeFormat.EAN_13:
           return _CODE_FORMAT_PROPERTY_EAN_13_ENABLED;
+        case CodeFormat.EAN_13_CHECK_DIGIT:
+          return _CODE_FORMAT_PROPERTY_EAN_13_CHECK_DIGIT;
         case CodeFormat.MAXICODE:
           return _CODE_FORMAT_PROPERTY_MAXICODE_ENABLED;
         case CodeFormat.PDF_417:
@@ -153,8 +182,10 @@ extension CodeFormatUtils on CodeFormat {
           return _CODE_FORMAT_PROPERTY_RSS_EXPANDED_ENABLED;
         case CodeFormat.UPC_A:
           return _CODE_FORMAT_PROPERTY_UPC_A_ENABLE;
-        case CodeFormat.UPC_E:
-          return _CODE_FORMAT_PROPERTY_UPC_E_ENABLED;
+        case CodeFormat.UPC_A_CHECK_DIGIT:
+          return _CODE_FORMAT_PROPERTY_UPC_A_CHECK_DIGIT;
+        case CodeFormat.UPC_E_CHECK_DIGIT:
+          return _CODE_FORMAT_PROPERTY_UPC_E_CHECK_DIGIT;
         default:
       }
     } catch (e) {
@@ -173,7 +204,8 @@ extension CodeFormatUtils on CodeFormat {
   /// - The codeFormats not specified in the [codeFormats] list will be set to disabled
   /// - Empty codeFormats list means no properties at all
   /// This function is Deprecated, use [getAsPropertiesComplement(...)] instead
-  @Deprecated("This function is Deprecated, use [getAsPropertiesComplement(...)]")
+  @Deprecated(
+      "This function is Deprecated, use [getAsPropertiesComplement(...)]")
   static Map<String?, dynamic> getFormatsAsProperties(
       final List<CodeFormat> codeFormats) {
     if (codeFormats.isEmpty) return {};
@@ -220,7 +252,7 @@ extension CodeFormatUtils on CodeFormat {
     codeFormats ??= [];
 
     Map<String?, dynamic> mapProperties =
-        getAsProperties(codeFormats, enabled: enabled);
+    getAsProperties(codeFormats, enabled: enabled);
     for (var codeFormat in CodeFormat.values) {
       String? propertyName = codeFormat.propertyName;
       if (propertyName != null && !mapProperties.containsKey(propertyName)) {
