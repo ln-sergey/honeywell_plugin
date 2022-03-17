@@ -1,5 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'scanner_callback.dart';
@@ -16,11 +19,11 @@ class HoneywellPlugin {
   static const _ON_DECODED = "onDecoded";
   static const _ON_ERROR = "onError";
 
-  static const MethodChannel _channel = const MethodChannel('honeywell_plugin');
+  static const MethodChannel _channel = MethodChannel('honeywell_plugin');
   ScannerCallBack _scannerCallBack;
 
   HoneywellPlugin({required ScannerCallBack scannerCallBack})
-      : this._scannerCallBack = scannerCallBack {
+      : _scannerCallBack = scannerCallBack {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
@@ -37,10 +40,10 @@ class HoneywellPlugin {
           onError(Exception(call.arguments));
           break;
         default:
-          print(call.arguments);
+          debugPrint("${call.arguments}");
       }
     } catch (e) {
-      print(e);
+      debugPrint("$e");
     }
     return Future.value(null);
   }
@@ -69,7 +72,7 @@ class HoneywellPlugin {
   }
 
   /// Set Honeywell scan properties
-  Future setProperties(Map<String, dynamic> mapProperties) {
+  Future setProperties(Map<String?, dynamic> mapProperties) {
     return _channel.invokeMethod(_SET_PROPERTIES, mapProperties);
   }
 
