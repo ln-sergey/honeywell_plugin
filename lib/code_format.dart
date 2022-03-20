@@ -187,6 +187,8 @@ extension CodeFormatUtils on CodeFormat {
           return _CODE_FORMAT_PROPERTY_UPC_A_ENABLE;
         case CodeFormat.UPC_A_CHECK_DIGIT:
           return _CODE_FORMAT_PROPERTY_UPC_A_CHECK_DIGIT;
+        case CodeFormat.UPC_E:
+          return _CODE_FORMAT_PROPERTY_UPC_E_ENABLED;
         case CodeFormat.UPC_E_CHECK_DIGIT:
           return _CODE_FORMAT_PROPERTY_UPC_E_CHECK_DIGIT;
         default:
@@ -255,7 +257,7 @@ extension CodeFormatUtils on CodeFormat {
     codeFormats ??= [];
 
     Map<String?, dynamic> mapProperties =
-    getAsProperties(codeFormats, enabled: enabled);
+        getAsProperties(codeFormats, enabled: enabled);
     for (var codeFormat in CodeFormat.values) {
       String? propertyName = codeFormat.propertyName;
       if (propertyName != null && !mapProperties.containsKey(propertyName)) {
