@@ -113,6 +113,7 @@ extension CodeFormatUtils on CodeFormat {
     CodeFormat.RSS_EXPANDED,
     CodeFormat.UPC_A,
     CodeFormat.UPC_A_CHECK_DIGIT,
+    CodeFormat.UPC_E,
     CodeFormat.UPC_E_CHECK_DIGIT,
   ];
 
