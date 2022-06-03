@@ -1,4 +1,4 @@
-## 1.0.4
+## 1.0.5
 
-* Fix getAsProperties utils for CodeFormat.
+* Fix exception with unhandled CODABAR_START_STOP format.
 
