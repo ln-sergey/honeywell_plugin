@@ -145,93 +145,64 @@ extension CodeFormatUtils on CodeFormat {
 
   String get name => describeEnum(this);
 
-  String? get propertyName {
-    try {
-      switch (this) {
-        case CodeFormat.AZTEC:
-          return _CODE_FORMAT_PROPERTY_AZTEC_ENABLED;
-        case CodeFormat.CODABAR:
-          return _CODE_FORMAT_PROPERTY_CODABAR_ENABLED;
-        case CodeFormat.CODE_39:
-          return _CODE_FORMAT_PROPERTY_CODE_39_ENABLED;
-        case CodeFormat.CODE_39_CHECK_DIGIT:
-          return _CODE_FORMAT_PROPERTY_CODE_39_CHECK_DIGIT;
-        case CodeFormat.CODE_93:
-          return _CODE_FORMAT_PROPERTY_CODE_93_ENABLED;
-        case CodeFormat.CODE_128:
-          return _CODE_FORMAT_PROPERTY_CODE_128_ENABLED;
-        case CodeFormat.DATA_MATRIX:
-          return _CODE_FORMAT_PROPERTY_DATAMATRIX_ENABLED;
-        case CodeFormat.EAN_8:
-          return _CODE_FORMAT_PROPERTY_EAN_8_ENABLED;
-        case CodeFormat.EAN_8_CHECK_DIGIT:
-          return _CODE_FORMAT_PROPERTY_EAN_8_CHECK_DIGIT;
-        case CodeFormat.EAN_13:
-          return _CODE_FORMAT_PROPERTY_EAN_13_ENABLED;
-        case CodeFormat.EAN_13_CHECK_DIGIT:
-          return _CODE_FORMAT_PROPERTY_EAN_13_CHECK_DIGIT;
-        case CodeFormat.MAXICODE:
-          return _CODE_FORMAT_PROPERTY_MAXICODE_ENABLED;
-        case CodeFormat.PDF_417:
-          return _CODE_FORMAT_PROPERTY_PDF_417_ENABLED;
-        case CodeFormat.QR_CODE:
-          return _CODE_FORMAT_PROPERTY_QR_CODE_ENABLED;
-        case CodeFormat.RSS_14:
-          return _CODE_FORMAT_PROPERTY_RSS_ENABLED;
-        case CodeFormat.RSS_EXPANDED:
-          return _CODE_FORMAT_PROPERTY_RSS_EXPANDED_ENABLED;
-        case CodeFormat.UPC_A:
-          return _CODE_FORMAT_PROPERTY_UPC_A_ENABLE;
-        case CodeFormat.UPC_A_CHECK_DIGIT:
-          return _CODE_FORMAT_PROPERTY_UPC_A_CHECK_DIGIT;
-        case CodeFormat.UPC_E_CHECK_DIGIT:
-          return _CODE_FORMAT_PROPERTY_UPC_E_CHECK_DIGIT;
-        default:
-      }
-    } catch (e) {
-      debugPrint(e.toString());
+  String get propertyName {
+    switch (this) {
+      case CodeFormat.AZTEC:
+        return _CODE_FORMAT_PROPERTY_AZTEC_ENABLED;
+      case CodeFormat.CODABAR:
+        return _CODE_FORMAT_PROPERTY_CODABAR_ENABLED;
+      case CodeFormat.CODE_39:
+        return _CODE_FORMAT_PROPERTY_CODE_39_ENABLED;
+      case CodeFormat.CODE_39_CHECK_DIGIT:
+        return _CODE_FORMAT_PROPERTY_CODE_39_CHECK_DIGIT;
+      case CodeFormat.CODE_93:
+        return _CODE_FORMAT_PROPERTY_CODE_93_ENABLED;
+      case CodeFormat.CODE_128:
+        return _CODE_FORMAT_PROPERTY_CODE_128_ENABLED;
+      case CodeFormat.DATA_MATRIX:
+        return _CODE_FORMAT_PROPERTY_DATAMATRIX_ENABLED;
+      case CodeFormat.EAN_8:
+        return _CODE_FORMAT_PROPERTY_EAN_8_ENABLED;
+      case CodeFormat.EAN_8_CHECK_DIGIT:
+        return _CODE_FORMAT_PROPERTY_EAN_8_CHECK_DIGIT;
+      case CodeFormat.EAN_13:
+        return _CODE_FORMAT_PROPERTY_EAN_13_ENABLED;
+      case CodeFormat.EAN_13_CHECK_DIGIT:
+        return _CODE_FORMAT_PROPERTY_EAN_13_CHECK_DIGIT;
+      case CodeFormat.MAXICODE:
+        return _CODE_FORMAT_PROPERTY_MAXICODE_ENABLED;
+      case CodeFormat.PDF_417:
+        return _CODE_FORMAT_PROPERTY_PDF_417_ENABLED;
+      case CodeFormat.QR_CODE:
+        return _CODE_FORMAT_PROPERTY_QR_CODE_ENABLED;
+      case CodeFormat.RSS_14:
+        return _CODE_FORMAT_PROPERTY_RSS_ENABLED;
+      case CodeFormat.RSS_EXPANDED:
+        return _CODE_FORMAT_PROPERTY_RSS_EXPANDED_ENABLED;
+      case CodeFormat.UPC_A:
+        return _CODE_FORMAT_PROPERTY_UPC_A_ENABLE;
+      case CodeFormat.UPC_A_CHECK_DIGIT:
+        return _CODE_FORMAT_PROPERTY_UPC_A_CHECK_DIGIT;
+      case CodeFormat.UPC_E_CHECK_DIGIT:
+        return _CODE_FORMAT_PROPERTY_UPC_E_CHECK_DIGIT;
+      default:
+        throw Exception();
     }
-    return null;
   }
 
   static CodeFormat? valueOf(String name) =>
       CodeFormat.values.firstWhereOrNull((value) => value.name == name);
 
-  /// Returns a Map of Honeywell's Barcode formats properties enabled by default
-  /// according to the List of CodeFormat specified.
-  /// [codeFormats] the List of CodeFormat enums to be converted to Honeywell properties
-  /// IMPORTANT:
-  /// - The codeFormats not specified in the [codeFormats] list will be set to disabled
-  /// - Empty codeFormats list means no properties at all
-  /// This function is Deprecated, use [getAsPropertiesComplement(...)] instead
-  @Deprecated(
-      "This function is Deprecated, use [getAsPropertiesComplement(...)]")
-  static Map<String?, dynamic> getFormatsAsProperties(
-      final List<CodeFormat> codeFormats) {
-    if (codeFormats.isEmpty) return {};
-
-    Map<String?, dynamic> mapProperties = {};
-    for (var codeFormat in codeFormats) {
-      mapProperties[codeFormat.propertyName] = true;
-    }
-    for (var codeFormat in CodeFormat.values) {
-      String? propertyName = codeFormat.propertyName;
-      if (propertyName != null) {
-        mapProperties[propertyName] = mapProperties.containsKey(propertyName);
-      }
-    }
-    return mapProperties;
-  }
 
   /// Returns a Map of Honeywell's Barcode formats properties according to the
   /// List of CodeFormat specified and the [enabled] value which is true by default.
   /// [codeFormats] the List of CodeFormat enums to be converted to Honeywell properties
   /// [enabled] the value to be set to the format property, true or false
-  static Map<String?, dynamic> getAsProperties(
+  static Map<String, dynamic> getAsProperties(
       final List<CodeFormat> codeFormats,
       {bool enabled = true}) {
     if (codeFormats.isEmpty) return {};
-    Map<String?, dynamic> mapProperties = {};
+    Map<String, dynamic> mapProperties = {};
     for (var codeFormat in codeFormats) {
       mapProperties[codeFormat.propertyName] = enabled;
     }
@@ -246,16 +217,16 @@ extension CodeFormatUtils on CodeFormat {
   /// [enabled] the value to be set to the format property, true or false.
   /// IMPORTANT:
   /// - The codeFormats not specified in the [codeFormats] list will be set to the opposite of enabled like !enabled
-  static Map<String?, dynamic> getAsPropertiesComplement(
+  static Map<String, dynamic> getAsPropertiesComplement(
       List<CodeFormat>? codeFormats,
       {bool enabled = true}) {
     codeFormats ??= [];
 
-    Map<String?, dynamic> mapProperties =
+    Map<String, dynamic> mapProperties =
         getAsProperties(codeFormats, enabled: enabled);
     for (var codeFormat in CodeFormat.values) {
-      String? propertyName = codeFormat.propertyName;
-      if (propertyName != null && !mapProperties.containsKey(propertyName)) {
+      String propertyName = codeFormat.propertyName;
+      if (!mapProperties.containsKey(propertyName)) {
         mapProperties[propertyName] = !enabled;
       }
     }
