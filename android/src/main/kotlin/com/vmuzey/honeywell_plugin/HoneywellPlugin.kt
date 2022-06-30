@@ -11,8 +11,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 
-
-
 /** HoneywellPlugin */
 class HoneywellPlugin(): FlutterPlugin, MethodCallHandler, ScannerCallBack {
   val METHOD_CHANNEL = "honeywell_plugin"
@@ -41,7 +39,6 @@ class HoneywellPlugin(): FlutterPlugin, MethodCallHandler, ScannerCallBack {
       scannerAvailable = false
     }
   }
-
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, METHOD_CHANNEL)
@@ -105,7 +102,7 @@ class HoneywellPlugin(): FlutterPlugin, MethodCallHandler, ScannerCallBack {
       }
     } catch (e: java.lang.Exception) {
       e.printStackTrace()
-      result.error(e.message, null, null)
+      result.error(e.message.toString(), null, null)
     }
   }
 
