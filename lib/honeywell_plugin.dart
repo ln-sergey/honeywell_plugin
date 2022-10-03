@@ -128,11 +128,11 @@ class HoneywellPlugin {
     return _channel.invokeMethod(_STOP_SCANNER);
   }
 
-  Future resumeScanner() {
+  Future resumeScaner() {
     return _channel.invokeMethod(_RESUME_SCANNER);
   }
 
-  Future pauseScanner() {
+  Future pauseScaner() {
     return _channel.invokeMethod(_PAUSE_SCANNER);
   }
 }

@@ -1,4 +1,4 @@
-## 1.0.7
+## 1.0.8
 
-* Fix setProperties.
+* Fix startScaner, resumeScaner, isAvailable.
 

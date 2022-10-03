@@ -6,30 +6,28 @@ import com.honeywell.aidc.AidcManager.CreatedCallback
 import com.honeywell.aidc.BarcodeReader.BarcodeListener
 
 
-class HoneywellScannerNative(context: Context) : HoneywellScanner(context), CreatedCallback,
+class HoneywellScannerNative(private val context: Context) : HoneywellScanner(context),
+    CreatedCallback,
     BarcodeListener {
-    private var initializing = false
+    private var initialazing = false
     private var pendingResume = false
 
-    private var scannerManager: AidcManager? = null
+    private lateinit var scannerManager: AidcManager
 
     private lateinit var scanner: BarcodeReader
 
     private lateinit var properties: MutableMap<String, Any>
 
     init {
-        initializing = true
+        initialazing = true
         AidcManager.create(context, this)
     }
 
     override fun onCreated(aidcManager: AidcManager) {
         try {
             scannerManager = aidcManager
-            scanner = scannerManager!!.createBarcodeReader()
-            // register bar code event listener
+            scanner = scannerManager.createBarcodeReader()
             scanner.addBarcodeListener(this)
-
-            // set the trigger mode to client control
             try {
                 scanner.setProperty(
                     BarcodeReader.PROPERTY_TRIGGER_CONTROL_MODE,
@@ -39,14 +37,11 @@ class HoneywellScannerNative(context: Context) : HoneywellScanner(context), Crea
             } catch (e: UnsupportedPropertyException) {
                 onError(e)
             }
-            // register trigger state change listener
-            // When using Automatic Trigger control do not need to implement the onTriggerEvent
-            // function scanner.addTriggerListener(this);
             initProperties()
             scanner.setProperties(properties)
-            initialized = true
-            initializing = false
-            if (pendingResume) resumeScanner()
+            isAvailable = true
+            initialazing = false
+            startScanner()
         } catch (e: InvalidScannerNameException) {
             onError(e)
         } catch (e: Exception) {
@@ -59,27 +54,29 @@ class HoneywellScannerNative(context: Context) : HoneywellScanner(context), Crea
     }
 
     override fun onFailureEvent(barcodeFailureEvent: BarcodeFailureEvent) {
-        //Do nothing with unrecognized code due to an incomplete scanning
+//        Do nothing with unrecognized code due to an incomplete scanning
 //        if(barcodeFailureEvent != null) onError(new Exception(barcodeFailureEvent.toString()));
     }
 
     private fun initProperties() {
         properties = mutableMapOf()
-        properties[BarcodeReader.PROPERTY_AZTEC_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_CODABAR_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_CODE_39_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_CODE_93_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_CODE_128_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_DATAMATRIX_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_EAN_8_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_EAN_13_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_MAXICODE_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_PDF_417_ENABLED] = true
+        properties[BarcodeReader.PROPERTY_AZTEC_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_CODABAR_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_CODE_39_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_CODE_93_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_CODE_128_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_DATAMATRIX_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_EAN_8_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_EAN_13_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_MAXICODE_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_PDF_417_ENABLED] = false
+        // QR Code is the default code type for Honeywell Barcode Reader
         properties[BarcodeReader.PROPERTY_QR_CODE_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_RSS_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_RSS_EXPANDED_ENABLED] = true
-        properties[BarcodeReader.PROPERTY_UPC_A_ENABLE] = true
-        properties[BarcodeReader.PROPERTY_UPC_E_ENABLED] = true
+
+        properties[BarcodeReader.PROPERTY_RSS_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_RSS_EXPANDED_ENABLED] = false
+        properties[BarcodeReader.PROPERTY_UPC_A_ENABLE] = false
+        properties[BarcodeReader.PROPERTY_UPC_E_ENABLED] = false
     }
 
     override fun setProperties(mapProperties: Map<String, Any>?) {
@@ -114,16 +111,21 @@ class HoneywellScannerNative(context: Context) : HoneywellScanner(context), Crea
 
     override fun pauseScanner(): Boolean {
         scanner.release()
-        pendingResume = false
+        pendingResume = true
         return true
     }
 
     override fun startScanner(): Boolean {
         try {
             scanner.claim()
-        } catch (e: Exception) {
-            onError(e)
-            return false
+        } catch (e: IllegalStateException) {
+            try {
+                scanner = scannerManager.createBarcodeReader()
+                scanner.addBarcodeListener(this)
+                scanner.claim()
+            } catch (e1: Exception) {
+                AidcManager.create(context, this)
+            }
         }
         return true
     }
@@ -131,33 +133,17 @@ class HoneywellScannerNative(context: Context) : HoneywellScanner(context), Crea
     override fun stopScanner(): Boolean {
         pendingResume = false
         try {
-            // unregister barcode event listener
             scanner.removeBarcodeListener(this)
-
-            // unregister trigger state change listener
-            // When using Automatic Trigger control do not need to implement the onTriggerEvent
-            // function scanner.removeTriggerListener(this);
-
-            // release the scanner claim so we don't get any scanner notifications while paused
-            // and the scanner properties are restored to default.
             scanner.release()
-
-            // close BarcodeReader to clean up resources.
             scanner.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
         try {
-            if (scannerManager != null) {
-                // close AidcManager to disconnect from the scanner service.
-                // once closed, the object can no longer be used.
-                scannerManager!!.close()
-                scannerManager = null
-            }
+            scannerManager.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        initialized = false
         return true
     }
 }

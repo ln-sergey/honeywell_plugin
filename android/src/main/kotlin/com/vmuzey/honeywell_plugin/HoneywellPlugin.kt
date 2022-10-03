@@ -76,7 +76,7 @@ class HoneywellPlugin(): FlutterPlugin, MethodCallHandler, ScannerCallBack {
           result.success(true)
         }
         IS_AVAILABLE -> {
-          result.success(scanner?.initialized ?: false)
+          result.success(scanner?.isAvailable ?: false)
         }
         STOP_SCANNING -> {
           scanner?.stopScanning()

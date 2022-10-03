@@ -24,27 +24,18 @@ class _MyAppState extends State<MyApp>
   HoneywellPlugin? honeywellScanner;
   String? scannedCode = 'Empty';
   bool scannerEnabled = false;
+  bool scannerPaused = false;
   bool? scannerAvailable = false;
-  bool scan1DFormats = true;
-  bool scan2DFormats = true;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     honeywellScanner = HoneywellPlugin(scannerCallBack: this);
-    updateScanProperties();
     Timer.periodic(const Duration(microseconds: 300), (timer) async {
       scannerAvailable = await honeywellScanner!.isAvailable();
+      setState(() {});
     });
-  }
-
-  updateScanProperties() {
-    List<CodeFormat> codeFormats = [];
-    if (scan1DFormats) codeFormats.addAll(CodeFormatUtils.ALL_1D_FORMATS);
-    if (scan2DFormats) codeFormats.addAll(CodeFormatUtils.ALL_2D_FORMATS);
-    honeywellScanner!
-        .setProperties(CodeFormatUtils.getAsPropertiesComplement(codeFormats));
   }
 
   @override
@@ -81,8 +72,8 @@ class _MyAppState extends State<MyApp>
             ),
             Text(
               'Scanner is ${scannerAvailable ?? false ? "Available" : "Unavailable"}',
-              style:
-                  TextStyle(color: scannerEnabled ? Colors.blue : Colors.red),
+              style: TextStyle(
+                  color: scannerAvailable ?? false ? Colors.blue : Colors.red),
             ),
             const Divider(
               color: Colors.transparent,
@@ -92,29 +83,23 @@ class _MyAppState extends State<MyApp>
               color: Colors.transparent,
             ),
             SwitchListTile(
-              title: const Text("Scan 1D Codes"),
-              subtitle: const Text("like Code-128, Code-39, Code-93, etc"),
-              value: scan1DFormats,
-              onChanged: (value) {
-                scan1DFormats = value;
-                updateScanProperties();
-                setState(() {});
-              },
-            ),
-            SwitchListTile(
-              title: const Text("Scan 2D Codes"),
-              subtitle: const Text("like QR, Data Matrix, Aztec, etc"),
-              value: scan2DFormats,
-              onChanged: (value) {
-                scan2DFormats = value;
-                updateScanProperties();
-                setState(() {});
+              title: Text("Pause scanner"),
+              value: scannerPaused,
+              onChanged: (value) async {
+                if (value) {
+                  await honeywellScanner!.pauseScaner();
+                } else {
+                  await honeywellScanner!.resumeScaner();
+                }
+                setState(() {
+                  scannerPaused = value;
+                });
               },
             ),
             ElevatedButton(
               child: const Text("Start Scanner"),
-              onPressed: () {
-                honeywellScanner!.startScanner();
+              onPressed: () async {
+                await honeywellScanner!.startScanner();
                 scannerEnabled = true;
                 setState(() {});
               },
@@ -124,8 +109,8 @@ class _MyAppState extends State<MyApp>
             ),
             ElevatedButton(
               child: const Text("Stop Scanner"),
-              onPressed: () {
-                honeywellScanner!.stopScanner();
+              onPressed: () async {
+                await honeywellScanner!.stopScanner();
                 scannerEnabled = false;
                 setState(() {});
               },
@@ -134,11 +119,11 @@ class _MyAppState extends State<MyApp>
               color: Colors.transparent,
             ),
             GestureDetector(
-                onTapDown: (tapDownDetails) {
-                  honeywellScanner!.startScanning();
+                onTapDown: (_) async {
+                  await honeywellScanner!.startScanning();
                 },
-                onTapUp: (tapUpDetails) {
-                  honeywellScanner!.stopScanning();
+                onTapUp: (_) async {
+                  await honeywellScanner!.stopScanning();
                 },
                 child: const Text(
                   'SCANN',
@@ -158,17 +143,17 @@ class _MyAppState extends State<MyApp>
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
-        if (honeywellScanner != null) honeywellScanner!.resumeScanner();
+        if (honeywellScanner != null) honeywellScanner!.resumeScaner();
         break;
       case AppLifecycleState.inactive:
-        if (honeywellScanner != null) honeywellScanner!.pauseScanner();
+        if (honeywellScanner != null) honeywellScanner!.pauseScaner();
         break;
       case AppLifecycleState
           .paused: //AppLifecycleState.paused is used as stopped state because deactivate() works more as a pause for lifecycle
-        if (honeywellScanner != null) honeywellScanner!.pauseScanner();
+        if (honeywellScanner != null) honeywellScanner!.pauseScaner();
         break;
       case AppLifecycleState.detached:
-        if (honeywellScanner != null) honeywellScanner!.pauseScanner();
+        if (honeywellScanner != null) honeywellScanner!.pauseScaner();
         break;
       default:
         break;
