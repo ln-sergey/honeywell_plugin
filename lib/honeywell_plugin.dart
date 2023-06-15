@@ -1,8 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
+import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'scanner_callback.dart';
@@ -104,7 +105,8 @@ class HoneywellPlugin {
   /// that you can't use honeywell scann hardware
   ///
   /// Firsly, you must call [startScanner]
-  Future<bool?> isAvailable() {
+  Future<bool?> isAvailable() async {
+    if (kIsWeb || !Platform.isAndroid) return false;
     return _channel.invokeMethod(_IS_AVAILABLE);
   }
 

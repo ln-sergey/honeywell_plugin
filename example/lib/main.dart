@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:honeywell_plugin/honeywell_plugin.dart';
 import 'package:honeywell_plugin/scanner_callback.dart';
-import 'package:honeywell_plugin/code_format.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
